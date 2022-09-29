@@ -13,5 +13,9 @@
                 </div>
             </div>
         </div>
+
+        <div class="max-w-7xl flex justify-center">
+            <div class=""><x-forms.tinymce-editor/></div>
+        </div>
     </div>
 </x-app-layout>
