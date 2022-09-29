@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// customer / general public view. But it will have CRUD option for those blogs which are written by authentiacted users.
+Route::get('/', [BlogController::class, 'index'])->name('home'); 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// All blogs of authenticated author
+Route::get('my-blog', [BlogController::class, 'my_blogs'])->name('blog.my');
+Route::resource('blog', BlogController::class);
 
 require __DIR__.'/auth.php';
