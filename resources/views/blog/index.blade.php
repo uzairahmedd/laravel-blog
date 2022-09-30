@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="header"><h1>{{$header ?? ''}}</h1></x-slot>
     <div class="container md:w-full lg:w-3/5 mx-auto p-16">
         {{-- Empty blog list message --}}
         @if($blogs->isEmpty())
@@ -15,9 +16,13 @@
                 <h1 class="text-lg text-slate-600 font-light">{{$blog->sub_title}}</h1>
                 <p class="font-thin text-sm text-slate-400">{{ $blog->updated_at->format('m/d/Y') }}</p>
                 @if(Auth::user() && $blog->user->id == Auth::user()->id)
-                    <div class="mt-2">
-                        <a class="{{$blog->published ? 'text-red-400' : 'text-orange-400'}} decoration-solid underline underline-offset-4" href="blog/{{$blog->id}}/edit">{{__('Edit')}}</a> | 
-                        <a class="{{$blog->published ? 'text-red-400' : 'text-orange-400'}} decoration-solid underline underline-offset-4" href="{{ route('blog.destroy', ['blog' => $blog]) }}">{{__('Delete')}}</a>
+                    <div class="mt-2 flex justify-start">
+                        <a class="{{$blog->published ? 'text-red-400' : 'text-orange-400'}} decoration-solid underline underline-offset-4 mr-4" href="blog/{{$blog->id}}/edit">{{__('Edit')}}</a>
+                        <form method="POST" action="{{ route('blog.destroy', ['blog' => $blog]) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-red-800 decoration-solid underline underline-offset-4 bg-none" onclick="return confirm('Are you sure to delete this blog? This action is irreversible!')" type="submit">{{__('Delete')}}</button>
+                        </form>
                     </div>
                 @endif
             </div>

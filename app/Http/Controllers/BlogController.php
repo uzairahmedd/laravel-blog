@@ -8,6 +8,11 @@ use Auth;
 
 class BlogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['show', 'index']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +21,7 @@ class BlogController extends Controller
     public function index()
     {
         $blogs = Blog::all()->where('published', true);
-        return view('blog.index', ['blogs' => $blogs]);
+        return view('blog.index', ['blogs' => $blogs, 'header' => 'Blogs Feed']);
     }
 
     /**
@@ -63,7 +68,8 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        return view('blog.show', ['blog' => $blog]);
+        $comments = $blog->comments()->orderBy('id', 'DESC')->paginate(3);
+        return view('blog.show', ['blog' => $blog, 'comments' => $comments]);
     }
 
     /**
@@ -75,7 +81,7 @@ class BlogController extends Controller
     public function my_blogs()
     {
         $blogs = Auth::user()->blogs;
-        return view('blog.index', ['blogs' => $blogs]);
+        return view('blog.index', ['blogs' => $blogs, 'header' => 'Your Blogs']);
     }
 
     /**
@@ -109,6 +115,16 @@ class BlogController extends Controller
 
     }
 
+    public function comment(Request $request, Blog $blog)
+    {
+       $blog->comments()->create([
+           'body' => $request->body,
+           'user_id' => Auth::user()->id
+       ]);
+
+       return redirect()->back();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -117,6 +133,7 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        //
+        $blog->delete();
+        return redirect()->back()->with(['success' => 'Deleted successfully!']);
     }
 }
