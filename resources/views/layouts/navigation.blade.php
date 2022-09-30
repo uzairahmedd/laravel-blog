@@ -13,12 +13,12 @@
                 <!-- Navigation Links -->
                 @if(Auth::user())
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link :href="route('blog.my')" :active="request()->routeIs('/blog/my')">
+                        <x-nav-link :href="route('blog.my')" :active="request()->routeIs('blog.my')">
                             {{ __('My Blogs') }}
                         </x-nav-link>
                     </div>
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link class="text-red-400" :href="route('blog.create')" :active="request()->routeIs('/blog/create')">
+                        <x-nav-link :href="route('blog.create')" :active="request()->routeIs('blog.create')">
                             {{ __('New Blog') }}
                         </x-nav-link>
                     </div>

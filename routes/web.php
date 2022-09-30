@@ -20,5 +20,6 @@ Route::get('/', [BlogController::class, 'index'])->name('home');
 // All blogs of authenticated author
 Route::get('my-blog', [BlogController::class, 'my_blogs'])->name('blog.my');
 Route::resource('blog', BlogController::class);
+Route::post('blog/{blog}/comment', [BlogController::class, 'comment'])->name('comment');
 
 require __DIR__.'/auth.php';
